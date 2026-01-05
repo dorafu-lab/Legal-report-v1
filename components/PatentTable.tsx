@@ -55,12 +55,13 @@ const PatentTable: React.FC<PatentTableProps> = ({ patents, onEdit, onPreviewEma
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
       <div className="overflow-x-auto custom-scrollbar flex-grow">
-        <table className="w-full text-sm text-left text-gray-500 min-w-[1300px]">
+        <table className="w-full text-sm text-left text-gray-500 min-w-[1400px]">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
             <tr>
-              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">狀態</th>
-              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">申請國家</th>
-              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">專利名稱 / 類型</th>
+              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-24">狀態</th>
+              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-24">申請國家</th>
+              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-28">類型</th>
+              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">專利名稱</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">專利權人</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">發明人</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">申請號 / 公開號</th>
@@ -86,14 +87,16 @@ const PatentTable: React.FC<PatentTableProps> = ({ patents, onEdit, onPreviewEma
                 <td className="px-6 py-4 font-medium text-gray-900">
                   {patent.country}
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                   <div className="flex items-center">
+                       {getTypeIcon(patent.type)}
+                       <span className="text-gray-700">{patent.type}</span>
+                   </div>
+                </td>
                 <td className="px-6 py-4 min-w-[200px]">
                   <div className="flex flex-col">
                     <span className="font-semibold text-gray-900 mb-1">{patent.name}</span>
                     <div className="flex items-center text-xs text-gray-500 flex-wrap gap-y-2">
-                       <div className="flex items-center mr-3">
-                           {getTypeIcon(patent.type)}
-                           {patent.type}
-                       </div>
                        {patent.link && (
                            <a 
                                href={patent.link} 
