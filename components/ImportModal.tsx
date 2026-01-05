@@ -140,10 +140,12 @@ const ImportModal: React.FC<ImportModalProps> = ({ isOpen, onClose, onImport }) 
       if (result) {
         setParsedData(result);
         setStep('preview');
+      } else {
+        alert('解析失敗。這可能是因為 API Key 未設定，或 AI 無法識別內容。\n請檢查您的環境變數或網路連線。');
       }
     } catch (error) {
       console.error("Analysis failed", error);
-      alert('解析失敗，請確認檔案格式或內容。');
+      alert('解析過程中發生未預期的錯誤。');
     } finally {
       setIsAnalyzing(false);
     }
