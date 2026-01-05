@@ -9,13 +9,26 @@ const SYSTEM_INSTRUCTION = `
 
 let chatSession: Chat | null = null;
 
-const getApiKey = () => {
-  const key = process.env.API_KEY;
-  if (!key) {
-    console.error("API Key is missing. Please check your environment variables (.env file).");
-    // 不拋出錯誤，讓外層 catch 處理，但確保開發者能在 console 看到
+/**
+ * 清理 JSON 字串 (移除 Markdown 代碼區塊標記與多餘文字)
+ */
+const cleanJson = (text: string) => {
+  if (!text) return "";
+  
+  // 優先嘗試提取 Markdown JSON 代碼區塊 (```json ... ```)
+  const jsonBlockMatch = text.match(/```json\s*([\s\S]*?)\s*```/);
+  if (jsonBlockMatch) {
+    return jsonBlockMatch[1];
   }
-  return key || "";
+  
+  // 其次嘗試提取一般的 Markdown 代碼區塊 (``` ... ```)
+  const anyCodeBlockMatch = text.match(/```\s*([\s\S]*?)\s*```/);
+  if (anyCodeBlockMatch) {
+    return anyCodeBlockMatch[1];
+  }
+
+  // 如果沒有代碼區塊，則嘗試清理前後的 Markdown 標記，或假設整段即為 JSON
+  return text.replace(/^```json\s*/, '').replace(/^```\s*/, '').replace(/\s*```$/, '').trim();
 };
 
 /**
@@ -24,7 +37,7 @@ const getApiKey = () => {
 export const getChatSession = (): Chat => {
   if (!chatSession) {
     // 嚴格遵守安全性規範：僅從環境變數讀取 API Key
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     chatSession = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
@@ -88,14 +101,15 @@ const PATENT_SCHEMA_CONFIG = {
  */
 export const parsePatentFromText = async (text: string): Promise<Partial<Patent> | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `請將以下專利資訊解析為 JSON 格式：\n${text}`,
       config: PATENT_SCHEMA_CONFIG,
     });
 
-    return response.text ? JSON.parse(response.text) : null;
+    const cleanText = cleanJson(response.text || "");
+    return cleanText ? JSON.parse(cleanText) : null;
   } catch (error) {
     console.error("Gemini Parse Text Error:", error);
     return null;
@@ -107,7 +121,7 @@ export const parsePatentFromText = async (text: string): Promise<Partial<Patent>
  */
 export const parsePatentFromFile = async (base64Data: string, mimeType: string = 'application/pdf'): Promise<Partial<Patent> | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: getApiKey() });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: {
@@ -119,7 +133,8 @@ export const parsePatentFromFile = async (base64Data: string, mimeType: string =
       config: PATENT_SCHEMA_CONFIG,
     });
 
-    return response.text ? JSON.parse(response.text) : null;
+    const cleanText = cleanJson(response.text || "");
+    return cleanText ? JSON.parse(cleanText) : null;
   } catch (error) {
     console.error("Gemini Parse File Error:", error);
     return null;
