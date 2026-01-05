@@ -58,8 +58,8 @@ const PatentTable: React.FC<PatentTableProps> = ({ patents, onEdit, onPreviewEma
         <table className="w-full text-sm text-left text-gray-500 min-w-[1400px]">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
             <tr>
-              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-24">狀態</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-24">申請國家</th>
+              <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-24">狀態</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap w-28">類型</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">專利名稱</th>
               <th scope="col" className="px-6 py-3 font-semibold whitespace-nowrap">專利權人</th>
@@ -78,14 +78,14 @@ const PatentTable: React.FC<PatentTableProps> = ({ patents, onEdit, onPreviewEma
                
                return (
               <tr key={patent.id} className={`transition-colors ${isUrgent ? 'bg-orange-50/40 hover:bg-orange-50' : 'hover:bg-blue-50/50'}`}>
+                <td className="px-6 py-4 font-medium text-gray-900">
+                  {patent.country}
+                </td>
                 <td className="px-6 py-4">
                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(patent.status)}`}>
                       {patent.status === PatentStatus.Active ? <CheckCircle size={12} className="mr-1"/> : <AlertCircle size={12} className="mr-1"/>}
                       {patent.status}
                    </span>
-                </td>
-                <td className="px-6 py-4 font-medium text-gray-900">
-                  {patent.country}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                    <div className="flex items-center">
