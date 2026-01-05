@@ -9,13 +9,22 @@ const SYSTEM_INSTRUCTION = `
 
 let chatSession: Chat | null = null;
 
+const getApiKey = () => {
+  const key = process.env.API_KEY;
+  if (!key) {
+    console.error("API Key is missing. Please check your environment variables (.env file).");
+    // 不拋出錯誤，讓外層 catch 處理，但確保開發者能在 console 看到
+  }
+  return key || "";
+};
+
 /**
  * 取得或初始化 Gemini 對話 Session
  */
 export const getChatSession = (): Chat => {
   if (!chatSession) {
     // 嚴格遵守安全性規範：僅從環境變數讀取 API Key
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: getApiKey() });
     chatSession = ai.chats.create({
       model: 'gemini-3-flash-preview',
       config: {
@@ -46,7 +55,7 @@ export const sendMessageToGemini = async (message: string, contextPatents?: Pate
     return response.text || "抱歉，我現在無法回答您的問題。";
   } catch (error) {
     console.error("Gemini API Error:", error);
-    return "連線錯誤，請確認網路狀態或 API 配置。";
+    return "連線錯誤，請確認網路狀態或 API 配置 (API Key)。";
   }
 };
 
@@ -79,7 +88,7 @@ const PATENT_SCHEMA_CONFIG = {
  */
 export const parsePatentFromText = async (text: string): Promise<Partial<Patent> | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: getApiKey() });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: `請將以下專利資訊解析為 JSON 格式：\n${text}`,
@@ -98,7 +107,7 @@ export const parsePatentFromText = async (text: string): Promise<Partial<Patent>
  */
 export const parsePatentFromFile = async (base64Data: string, mimeType: string = 'application/pdf'): Promise<Partial<Patent> | null> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: getApiKey() });
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: {
