@@ -1,5 +1,5 @@
 {
-  "name": "copy-of-專利權管理",
+  "name": "專利權管理",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,7 +16,8 @@
     "recharts": "^3.6.0",
     "xlsx": "^0.18.5",
     "vite": "^7.3.0",
-    "@vitejs/plugin-react": "^5.1.2"
+    "@vitejs/plugin-react": "^5.1.2",
+    "firebase": "^12.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

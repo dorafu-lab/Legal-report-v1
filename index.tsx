@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { initAnalytics } from './services/firebase';
+
+// 初始化 Firebase Analytics
+initAnalytics();
 
 const rootElement = document.getElementById('root');
 
