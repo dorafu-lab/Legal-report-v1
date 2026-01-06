@@ -1,5 +1,6 @@
 {
   "name": "專利權管理",
   "description": "Professional Patent Rights Management Interface with AI assistance.",
+  "version": "20260106",
   "requestFramePermissions": []
 }

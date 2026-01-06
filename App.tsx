@@ -110,11 +110,17 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-slate-50 flex font-sans overflow-hidden">
       {/* Sidebar */}
       <aside className="w-64 bg-slate-900 text-slate-300 hidden lg:flex flex-col border-r border-slate-800">
-        <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg text-white shadow-lg shadow-blue-500/20">
-            <Briefcase size={20} />
+        <div className="p-6 border-b border-slate-800">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="bg-blue-600 p-2 rounded-lg text-white shadow-lg shadow-blue-500/20">
+              <Briefcase size={20} />
+            </div>
+            <span className="text-white font-bold text-lg tracking-tight">PatentVault</span>
           </div>
-          <span className="text-white font-bold text-lg tracking-tight">PatentVault</span>
+          <div className="pl-11 flex items-center gap-2">
+             <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-slate-700 font-mono">v20260106</span>
+             <span className="text-[10px] text-green-500 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>Stable</span>
+          </div>
         </div>
         
         <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto custom-scrollbar">
